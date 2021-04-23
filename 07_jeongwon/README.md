@@ -162,5 +162,74 @@ thead내의 헤더의 헤더는 다음과 같이 처리했다. 구분 칸만 sco
    - 정상적으로 5%, 10%, 15%를 모두 읽어준다.
 
 모든 테이블을 접근성을 최대한 고려하여 만들었지만, scope를 row로 지정해준 헤더가 왜 열에도 영향을 주는지는 아직 모르겠다.
+또한 줄바꿈을 우체국 홈페이지처럼 p로 지정할지 br로 띄울지 고민해봤는데, p로 해줄경우 끊어 읽어주기 때문에 이어지는 내용이 시각적인 이유로 줄바꿈 된 경우에는 br을, 여러가지 구분된 내용은 p를 사용하기로 했다.
+
+> 확인 해 보니 br로 줄바꿈을 해도 끊어 읽어주게 되어있다. 시각적으로만 줄바꿈을 할 수 있는 방법을 생각 해 보자.
 
 # 스타일
+
+### 참고자료
+
+- https://www.w3schools.com/css/css_table.asp
+- https://developer.mozilla.org/ko/docs/Learn/CSS/Building_blocks/Styling_tables
+
+모든 테이블이 같은 스타일을 공유하고 있으므로 전역 태그를 선택해서 속성을 지정해줘도 될 것 같다.
+
+일단 구현의 목적을 갖고 있기 때문에 가로는 고정폭으로 줬다. 우체국 사이트에서는 테이블의 사이즈는 100%이지만, 1100px를 고정폭 컨테이너로 갖고있기 때문에 1100px로 지정하기로 했다.
+
+나머지 스타일링은 무리없지 진행했는데 뭔가.. 끊겨있는 듯한 저 외곽선과 헤딩에서도 가장 위쪽 헤딩만 볼드처리 하는 것이 조금 어려웠지만, 선택자를 잘 이용해서 처리했다.
+
+헤딩의 처리는
+
+```css
+thead th {
+  background-color: #fafafa;
+  background-clip: padding-box;
+  position: relative;
+  border-left: none;
+  border-right: none;
+}
+
+thead tr:first-child th {
+  font-weight: 800;
+  color: #555;
+}
+```
+
+처럼 첫번째 열의 헤딩만 텍스트 처리를 해주는 식으로 해결했다.
+
+구분선의 경우는 헤딩부분의 좌우 구분선을 지우고 가상요소 선택자를 통해 별도의 구분선을 만들어 처리했다.
+
+```css
+thead tr th:not(:last-child)::after {
+  content: '';
+  display: block;
+  position: absolute;
+  height: 10px;
+  top: 0;
+  right: 0;
+  border-right: 1px solid #555;
+}
+```
+
+모든 셀 우상단에 임의의 구분선을 넣고 마지막 요소만 들어가지 않게끔 처리했다. 그 와중에 두번째 헤더는 첫번째 요소는 좌측에 구분선을 갖고있기 때문에 추가적으로 아래의 처리를 했다
+
+```css
+thead tr:not(:first-child) th:first-child {
+  border-left: 1px solid #ddd;
+}
+```
+
+선택자가 복잡하다.. 하지만 첫번째 헤더가 아닌 헤더들의 첫번째 칸 좌측에 구분선을 넣는다는 어렵지 않은 내용이다.
+
+모두 완성하고 보니 파이어폭스에서 헤더의 상하 구분선이 표시되지 않는다! 과제 제출까지 남은시간은 10분.. 파이어폭스 개발자 도구를 통해 찾아보니 원인은 배경색이 구분선 위에 그려져서 가려버리는 것이었다.
+
+https://stackoverflow.com/questions/7517127/borders-not-shown-in-firefox-with-border-collapse-on-table-position-relative-o
+
+이곳에서 관련 문제를 확인할 수 있었다.
+background-clip: padding-box 속성을 추가해서 해결했다.
+아마 파이어폭스에서 기본값으로 table-cell에 대하여 boackground-clip이 border-box으로 되어있어서 생긴 문제였던 것 같다.
+
+---
+
+아무튼 모든 문제를 해결했다. 아직도 scope를 row로 지정한 헤더를 열에서 읽는 이유를 찾을 수 없었지만, 시간이 모자르기 때문에 궁금증으로 남겨두고 일단 이쯤에서 과제를 마무리 한다.

@@ -1,0 +1,73 @@
+@import url(//fonts.googleapis.com/earlyaccess/nanumgothic.css);
+body {
+  font-family: 'Nanum Gothic', sans-serif;
+}
+
+table {
+  margin: 0 auto;
+  min-width: 1100px;
+  border-collapse: collapse;
+  border: 1px solid #ddd;
+  border-top: 2px solid #888;
+  font-size: 12px;
+  text-align: center;
+  line-height: 1.5;
+  table-layout: fixed;
+  margin-bottom: 50px;
+}
+
+table p {
+  margin: 5px 0;
+}
+
+table caption {
+  text-align: left;
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 5px;
+  line-height: 2;
+}
+
+table caption::before {
+  content: '';
+  border-radius: 2.5px;
+  display: inline-block;
+  height: 12px;
+  width: 5px;
+  margin-right: 2px;
+  background: linear-gradient(to bottom, red, orange);
+}
+
+td,
+th {
+  font-weight: 400;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+thead tr:not(:first-child) th:first-child {
+  border-left: 1px solid #ddd;
+}
+
+thead th {
+  background-color: #fafafa;
+  background-clip: padding-box;
+  position: relative;
+  border-left: none;
+  border-right: none;
+}
+
+thead tr:first-child th {
+  font-weight: 800;
+  color: #555;
+}
+
+thead tr th:not(:last-child)::after {
+  content: '';
+  display: block;
+  position: absolute;
+  height: 10px;
+  top: 0;
+  right: 0;
+  border-right: 1px solid #555;
+}
